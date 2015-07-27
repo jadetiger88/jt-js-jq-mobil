@@ -2,7 +2,7 @@ $(document).one('pageinit', function() {
 
 	showRuns(); 
 
-	$('#submit-x').on('tap', addRun);
+	$('#submit-x').on('tap', addOrEditRun);
 
 	$('.delete-run').on('tap', deleteRun); 
 
@@ -30,24 +30,25 @@ $(document).one('pageinit', function() {
     }
 
     function editRun() {
-    	var parent = $(this).parent(); 
-    	var grandParent = parent.parent(); 
+
 		var i = $(this).parent().parent().data("index"); 
     	var runs = getRuns(); 
     	 $('#add-mile').val(runs[i]["mile"]);
     	 $('#add-date').val(runs[i]["date"]);
-		 // $("#submit-x").data("edit-index", i);
+
+    	 //Set the index of entry to be updated before the 
+    	 // addOrEditeRun() is called. 
 		 $("#submit-x").attr("data-index", i.toString());
+		 $(".operation-title").html("Edit Run");
     }
 
 	// Add Run Data
-	function addRun() {
-
-		var op = $(this).data("op");
+	function addOrEditRun() {
 
 		// Get user inputs
 		var miles = $('#add-mile').val(); 
 		var date = $('#add-date').val();
+		var msg = "Run added"; 
 
 		// Turn the user input into the run object
 		var run = {
@@ -60,7 +61,8 @@ $(document).one('pageinit', function() {
 		var runs = getRuns(); 
 		var index = $(this).data("index"); 
 		if (index != null) {
-			runs.splice(index, 1); 			
+			runs.splice(index, 1);
+			msg = "Run edited"; 		
 		} 
 
 
@@ -69,7 +71,7 @@ $(document).one('pageinit', function() {
 		localStorage.setItem('runs', JSON.stringify(runs));
 
 		// Give confirmation to the user
-		alert('Run added');
+		alert(msg);
 
 		window.location.href="index.html";
 		return false;
@@ -77,9 +79,6 @@ $(document).one('pageinit', function() {
 
 
     function deleteRun() {	
-
-    	var parent = $(this).parent(); 
-    	var grandParent = parent.parent(); 
 		var i = $(this).parent().parent().data("index"); 
 		var runs = getRuns(); 
 		runs.splice(i, 1); 
