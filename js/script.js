@@ -8,12 +8,17 @@ $(document).one('pageinit', function() {
 
 	$('.edit-run').on('tap', editRun);
 
+	$('#clear-runs').on('tap', clearRuns);
+
     function showRuns() {
 
     	var runs = getRuns(); 
 
-         var len = runs.length;
-    	for (var i = 0; i < runs.length; i++) {
+        var len = runs.length;
+
+        var msg = (len > 0) ? "Your latest runs" : "You have no runs"; 
+        $("#run-heading").html(msg); 
+        for (var i = 0; i < runs.length; i++) {
     		$('#stats').append(
     				'<li class="ui-body-inhereit ui-li-static"' + 'data-index="' + i + '"' + ' >' + 
     			    	'<strong>Date: </strong>' + runs[i]["date"] + '<br>' +
@@ -83,6 +88,11 @@ $(document).one('pageinit', function() {
 		var runs = getRuns(); 
 		runs.splice(i, 1); 
 		localStorage.setItem('runs', JSON.stringify(runs));
+		window.location.href="index.html";
+	}
+
+	function clearRuns() {
+		localStorage.removeItem('runs');		
 		window.location.href="index.html";
 	}
 
